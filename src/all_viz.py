@@ -96,7 +96,8 @@ off=round( n / 200 )
 indexLo=index*off
 indexHi=(index+1)*off
 print("Zindex " + str(index) + " low " + str(indexLo) + " high " + str( indexHi ) )
-for index2 in range( indexLo, indexHi ):
+# for index2 in range( indexLo, indexHi ):
+for index2 in range( 0, n+1 ):
     if index2 < df.shape[0]:
         ifn=df['filename'].iloc[index2]
         mystem=Path( ifn ).stem    

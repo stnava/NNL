@@ -5,7 +5,7 @@ import os
 import sys
 from os.path import exists
 nthreads = str(48)
-index=99 # 1509 # 1080  #  16 # 779 # 375 # 886
+index=0 # 1509 # 1080  #  16 # 779 # 375 # 886
 if len( sys.argv ) > 1 :
     index=int( sys.argv[1] )+int( sys.argv[3] )
     nthreads=str(sys.argv[2])
@@ -25,11 +25,10 @@ import glob as glob
 import os
 import pandas as pd
 import re as re
-mydir = os.path.expanduser( "/mnt/cluster/data/ADNI/nrg/ADNI/")
+mydir = os.path.expanduser( "/mnt/cluster/data/NNL/NRG/NNL/")
 print("index: " + str(index) + " threads " + nthreads )
-studyfn="/mnt/cluster/data/ADNI/matched_mm_data5_hq.csv"
-dtype_spec = {194: 'object', 216: 'object', 225: 'object'}
-df=pd.read_csv( studyfn, dtype=dtype_spec )
+studyfn="/mnt/cluster/data/NNL/matched_mm_data5.csv"
+df=pd.read_csv( studyfn )
 if index > (df.shape[0]-1):
     print("index " + str(index) + " too big")
     sys.exit(0)
@@ -42,7 +41,7 @@ templatealr = ants.image_read( tlrfn )
 
 
 import subprocess
-cmd_str = " sudo find /tmp  -cmin +60 -delete "
+cmd_str = " sudo find /tmp  -cmin +330 -delete "
 subprocess.run(cmd_str, shell=True)
 
 csvfns = df['filename']
@@ -59,14 +58,14 @@ if not exists( testfn ):
     antspymm.get_data()
 else:
     print("SR models are here ... " + testfn )
-rootdir='/mnt/cluster/data/ADNI/'
+rootdir='/mnt/cluster/data/NNL/'
 mfn='/home/ubuntu/.antspymm/siq_smallshort_train_2x2x2_2chan_featgraderL6_postseg_best_mdl.h5'
 mdl, mdlshape = siq.read_srmodel(mfn)
 csvrow=csvrow.dropna(axis=1)
 sid=str(csvrow['subjectID'].iloc[0] )
 dt=str(csvrow['date'].iloc[0])
-iid=str(csvrow['imageID'].iloc[0])
-nrgt1fn=os.path.join( rootdir, "nrg/ADNI", sid, dt, 'T1w', iid, str(csvrow['filename'].iloc[0]+'.nii.gz') )
+iid='000' # str(csvrow['imageID'].iloc[0])
+nrgt1fn=os.path.join( rootdir, "NRG/NNL", sid, dt, 'T1w', iid, str(csvrow['filename'].iloc[0]+'.nii.gz') )
 dosr=False
 if not exists( nrgt1fn ):
     print("T1 " + nrgt1fn + " is gatored")
@@ -94,7 +93,7 @@ else:
         os.makedirs( os.path.dirname( srout ), exist_ok=True )
         ants.image_write( ants.iMath( mysr['super_resolution'], "Normalize"),  srout )
 
-csvrow['projectID']='ADNI'
+csvrow['projectID']='NNL'
 
 ############################################################################################
 mods=['T1w' ] #  , 'DTI', 'T2Flair', 'rsfMRI' ]
