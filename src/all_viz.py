@@ -3,6 +3,8 @@ import shutil
 from pathlib import Path
 
 copy_file_with_dirs = lambda src, dst: (dst.parent.mkdir(parents=True, exist_ok=True), shutil.copy(src, dst))[1]
+link_file_with_dirs = lambda src, dst: (dst.parent.mkdir(parents=True, exist_ok=True), os.symlink(src, dst))[1]
+# os.symlink(file, destination_file)lambda src, dst: (dst.parent.mkdir(parents=True, exist_ok=True), shutil.copy(src, dst))[1]
 
 def map_modality(modality):
     modality_map = {
@@ -44,7 +46,7 @@ mydir = os.path.expanduser( "/mnt/cluster/data/NNL/Nifti/" )
 # get all the subject t1 images
 qcfn="images_to_qc_2024_June.csv"
 mysep='_'
-if not exists( qcfn ) or True:
+if not exists( qcfn ) :
     print("Collect all images" )
     mymods = ['t1','flair','dwi_ap', 'dwi_pa', 'perf', 'rsfmri' ]#   # antspymm.get_valid_modalities( )
     nwmods = ['T1w','T2Flair', 'DTILR', 'DTIRL', 'perf', 'rsfMRI' ]
@@ -62,6 +64,8 @@ if not exists( qcfn ) or True:
         newx = re.sub( "dwi_ap.nii.gz", "DTILR", newx )
         newx = re.sub( "dwi_pa.nii.gz", "DTIRL", newx )
         xparts = re.split(r'_', newx )
+        if len( xparts ) == 4:
+            xparts = xparts[0:3] # remove extensions like heudiconv841
         xparts[0] = re.sub( 'sub-', '', xparts[0] ) # study
         for z in range(len(xparts)):
             xparts[z] = re.sub( '.nii.gz', '', xparts[z] )
@@ -72,7 +76,7 @@ if not exists( qcfn ) or True:
         newx = "NRG/"+str(Path(*xparts)) + "/"+ mysep.join( xparts )+'.nii.gz'
         if antspymm.validate_nrg_file_format( newx, mysep )[0] and not exists( newx ) :
             print("copy "+ newx)
-            copy_file_with_dirs(Path(x), Path(newx))
+            link_file_with_dirs(Path(x), Path(newx))
             print("done")
         if not antspymm.validate_nrg_file_format( newx, mysep )[0]:
             print("bad "+ newx)
@@ -88,7 +92,7 @@ mypr=False
 myresam=None # 2.0
 odir='vizx_2024'
 n=df.shape[0]
-off=round( n / 1000 )
+off=round( n / 40 )
 indexLo=index*off
 indexHi=(index+1)*off
 for index2 in range( indexLo, indexHi ):
