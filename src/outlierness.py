@@ -25,12 +25,8 @@ for n in range(len(mymods)):
                     selit.append(False)
             jjj = jj[ selit ]
             print( m + " new shape " + str( jjj.shape[0] ), flush=True )
-            jjj.to_csv("/tmp/temp.csv")
             jjj=antspymm.average_blind_qc_by_modality(jjj,verbose=False) ## reduce the time series qc
-            jjj.to_csv("/tmp/temp.csv")
             print( m + " avg shape " + str( jjj.shape[0] ), flush=True )
-            # jjj['EVR'].fillna(jjj['EVR'].mean(), inplace=True)
-            # jjj['mi'].fillna(jjj['mi'].mean(), inplace=True)
             print("calculate outlierness "+m)
             jjj=antspymm.outlierness_by_modality( jjj, verbose=False)
             jjj.to_csv( "nnl_mm_outlierness_"+m+"_x2.csv"  )

@@ -92,9 +92,10 @@ mypr=False
 myresam=None # 2.0
 odir='vizx_2024'
 n=df.shape[0]
-off=round( n / 40 )
+off=round( n / 200 )
 indexLo=index*off
 indexHi=(index+1)*off
+print("Zindex " + str(index) + " low " + str(indexLo) + " high " + str( indexHi ) )
 for index2 in range( indexLo, indexHi ):
     if index2 < df.shape[0]:
         ifn=df['filename'].iloc[index2]
