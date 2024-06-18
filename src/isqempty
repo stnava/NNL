@@ -1,0 +1,24 @@
+
+#!/bin/bash
+
+# Interval in seconds between checks
+INTERVAL=50
+
+# Function to check job count
+check_queue() {
+  JOB_COUNT=$(squeue -h | wc -l)
+  echo "Checking the Slurm queue..."
+  if [ "$JOB_COUNT" -eq 0 ]; then
+    echo "The Slurm queue is now empty."
+    exit 0
+  else
+    echo "There are $JOB_COUNT jobs in the Slurm queue."
+  fi
+}
+
+# Loop until the queue is empty
+while true; do
+  check_queue
+  sleep $INTERVAL
+done
+
