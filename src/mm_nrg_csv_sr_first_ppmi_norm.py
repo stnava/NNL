@@ -5,7 +5,7 @@ import os
 import sys
 from os.path import exists
 nthreads = str(48)
-index=0 # 1509 # 1080  #  16 # 779 # 375 # 886
+index=200 # 1509 # 1080  #  16 # 779 # 375 # 886
 if len( sys.argv ) > 1 :
     index=int( sys.argv[1] )+int( sys.argv[3] )
     nthreads=str(sys.argv[2])
@@ -94,7 +94,6 @@ else:
         ants.image_write( ants.iMath( mysr['super_resolution'], "Normalize"),  srout )
 
 csvrow['projectID']='NNL'
-
 ############################################################################################
 mods=['T1w' ] #  , 'DTI', 'T2Flair', 'rsfMRI' ]
 template = ants.image_read("~/.antspymm/PPMI_template0.nii.gz").reorient_image2("LPI")
@@ -121,27 +120,11 @@ if True:
                         normalization_template_output='ppmi',
                         normalization_template_transform_type='antsRegistrationSyNQuickRepro[s]',
                         normalization_template_spacing=[1,1,1])
-    if srolder:
-        studycsv2 = antspymm.study_dataframe_from_matched_dataframe(
-            csvrow,
-            rootdir + "nrg/",
-            rootdir + "processedCSVSRNext/", verbose=True)
-        mmrun = antspymm.mm_csv( studycsv2,
-                        dti_motion_correct='SyN',
-                        dti_denoise=True,
-                        srmodel_T1 = "siq_smallshort_train_2x2x2_2chan_featgraderL6_postseg_best_mdl.h5",
-                        # srmodel_T1 = "siq_smallshort_train_2x2x2_2chan_featvggL6_postseg_best_mdl.h5",
-                        srmodel_NM = "siq_smallshort_train_bestup_1chan_featgraderL6_best_mdl.h5",
-                        srmodel_DTI = "siq_smallshort_train_bestup_1chan_featgraderL6_best_mdl.h5",
-                        normalization_template=template,
-                        normalization_template_output='ppmi',
-                        normalization_template_transform_type='antsRegistrationSyNQuickRepro[s]',
-                        normalization_template_spacing=[1,1,1])
     if door:
         outdir = rootdir + "processedCSV/"
         studycsv2 = antspymm.study_dataframe_from_matched_dataframe(
             csvrow,
-            rootdir + "nrg/",
+            rootdir + "NRG/",
             outdir, verbose=True)
         mmrun = antspymm.mm_csv( studycsv2,
                         dti_motion_correct='SyN',
