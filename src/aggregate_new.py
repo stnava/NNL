@@ -7,13 +7,13 @@ if len(sys.argv) > 1:
     print(f"The argument passed is: {wpdir}")
 else:
     print("No argument was passed.")
-    sys.exit(0)
+    wpdir='processedCSV'
 import antspymm
 import glob as glob
 import re
 import pandas as pd
 import os
-df = pd.read_csv( "matched_mm_data5.csv" )
+df = pd.read_csv( "matched_mm_data5.csv", dtype={'imageID': str, 'perfid': str, "rsfid1": str, "dtid1": str, "dtid2": str, "flairid": str }  )
 print( df )
 print( df.keys() )
 pdir='./' + wpdir + '/'

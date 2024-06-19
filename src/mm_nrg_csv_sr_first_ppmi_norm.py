@@ -5,7 +5,7 @@ import os
 import sys
 from os.path import exists
 nthreads = str(48)
-index=0 # 1509 # 1080  #  16 # 779 # 375 # 886
+index=76 # 1509 # 1080  #  16 # 779 # 375 # 886
 if len( sys.argv ) > 1 :
     index=int( sys.argv[1] )+int( sys.argv[3] )
     nthreads=str(sys.argv[2])
@@ -130,7 +130,6 @@ if True:
                 studycsv2['subjectID'].iloc[0], studycsv2['date'].iloc[0] )
         qvfn1 = qvfn + '/' + studycsv2['projectID'].iloc[0] + "_" + studycsv2['subjectID'].iloc[0] + "_"+ studycsv2['date'].iloc[0] + "_pre"
         qvfn2 = qvfn + '/' + studycsv2['projectID'].iloc[0] + "_" + studycsv2['subjectID'].iloc[0] + "_"+ studycsv2['date'].iloc[0] + "_post"
-        deekkee
         antspymm.quick_viz_mm_nrg( studycsv2['sourcedir'].iloc[0], 
                 studycsv2['projectID'].iloc[0],
                 studycsv2['subjectID'].iloc[0], 

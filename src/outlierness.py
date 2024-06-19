@@ -95,5 +95,8 @@ import antspymm
 import pandas as pd
 alldf=pd.read_csv("nnl_mm_outlierness_x2.csv")
 matched_mm_data2=antspymm.mm_match_by_qc_scoring_all( alldf, fix_LRRL=False, mysep='_', verbose=True )
+for col in ['imageID','perfid', "rsfid1", "dtid1", "dtid2", "flairid" ]:
+    matched_mm_data2[col] = matched_mm_data2[col].astype(str).str.replace('\n', ' ', regex=False)
+
 matched_mm_data2.to_csv( "matched_mm_data5.csv", index=False )
 
