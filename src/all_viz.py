@@ -46,7 +46,7 @@ mydir = os.path.expanduser( "/mnt/cluster/data/NNL/Nifti/" )
 # get all the subject t1 images
 qcfn="images_to_qc_2024_June.csv"
 mysep='_'
-if not exists( qcfn ) :
+if not exists( qcfn ) or True:
     print("Collect all images" )
     mymods = ['t1','flair','dwi_ap', 'dwi_pa', 'perf', 'rsfmri' ]#   # antspymm.get_valid_modalities( )
     nwmods = ['T1w','T2Flair', 'DTILR', 'DTIRL', 'perf', 'rsfMRI' ]

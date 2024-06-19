@@ -126,6 +126,16 @@ if True:
             csvrow,
             rootdir + "NRG/",
             outdir,  verbose=True)
+        qvfn = os.path.join( studycsv2['outputdir'].iloc[0], studycsv2['projectID'].iloc[0],
+                studycsv2['subjectID'].iloc[0], studycsv2['date'].iloc[0] )
+        qvfn1 = qvfn + '/' + studycsv2['projectID'].iloc[0] + "_" + studycsv2['subjectID'].iloc[0] + "_"+ studycsv2['date'].iloc[0] + "_pre"
+        qvfn2 = qvfn + '/' + studycsv2['projectID'].iloc[0] + "_" + studycsv2['subjectID'].iloc[0] + "_"+ studycsv2['date'].iloc[0] + "_post"
+        deekkee
+        antspymm.quick_viz_mm_nrg( studycsv2['sourcedir'].iloc[0], 
+                studycsv2['projectID'].iloc[0],
+                studycsv2['subjectID'].iloc[0], 
+                studycsv2['date'].iloc[0], 
+                show_it = qvfn1 )
         mmrun = antspymm.mm_csv( studycsv2,
                         dti_motion_correct='SyN',
                         dti_denoise=True,
@@ -133,6 +143,12 @@ if True:
                         normalization_template_output='ppmi',
                         normalization_template_transform_type='antsRegistrationSyNQuickRepro[s]',
                         normalization_template_spacing=[1,1,1])
+        antspymm.quick_viz_mm_nrg( studycsv2['outputdir'].iloc[0],
+                studycsv2['projectID'].iloc[0],
+                studycsv2['subjectID'].iloc[0],
+                studycsv2['date'].iloc[0],
+                post=True,
+                show_it = qvfn2 )
 
 print("sr first done")
 
