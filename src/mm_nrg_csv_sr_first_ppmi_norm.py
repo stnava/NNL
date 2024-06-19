@@ -5,7 +5,7 @@ import os
 import sys
 from os.path import exists
 nthreads = str(48)
-index=200 # 1509 # 1080  #  16 # 779 # 375 # 886
+index=0 # 1509 # 1080  #  16 # 779 # 375 # 886
 if len( sys.argv ) > 1 :
     index=int( sys.argv[1] )+int( sys.argv[3] )
     nthreads=str(sys.argv[2])
@@ -74,7 +74,7 @@ if not exists( nrgt1fn ):
 else:    
     imgo = antspymm.mm_read( nrgt1fn, modality='T1w' ).iMath("Normalize")
     imgo_spacing = ants.get_spacing( imgo )
-    local_grade = antspyt1w.resnet_grader( imgo * antspynet.brain_extraction( imgo, 't1' ) )['gradeNum'][0]
+    local_grade = 3.0 # antspyt1w.resnet_grader( imgo * antspynet.brain_extraction( imgo, 't1' ) )['gradeNum'][0]
     imgo_spacing = ants.get_spacing( imgo )
     if imgo_spacing[2] < 0.80:
         srout = nrgt1fn # dont use the SR - too taxing on compute at this point given how few subjects it is 
@@ -107,7 +107,7 @@ if True:
         outdir = rootdir + "processedCSVSRFIRST/"
         studycsv2 = antspymm.study_dataframe_from_matched_dataframe(
             csvrow,
-            rootdir + "nrg/",
+            rootdir + "NRG/",
             outdir, verbose=True)
         studycsv2.iat[0, studycsv2.columns.get_loc('filename')] = srout
 
@@ -125,7 +125,7 @@ if True:
         studycsv2 = antspymm.study_dataframe_from_matched_dataframe(
             csvrow,
             rootdir + "NRG/",
-            outdir, verbose=True)
+            outdir,  verbose=True)
         mmrun = antspymm.mm_csv( studycsv2,
                         dti_motion_correct='SyN',
                         dti_denoise=True,

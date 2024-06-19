@@ -31,6 +31,8 @@ for n in range(len(mymods)):
             # jjj['mi'].fillna(jjj['mi'].mean(), inplace=True)
             print("calculate outlierness "+m)
             jjj=antspymm.outlierness_by_modality( jjj, verbose=False)
+            if m == 'perf':
+                jjj['modality']='perf'
             jjj.to_csv( "nnl_mm_outlierness_"+m+"_x2.csv"  )
         else:
             jjj=pd.read_csv( "nnl_mm_outlierness_"+m+"_x2.csv" )

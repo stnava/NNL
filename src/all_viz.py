@@ -78,6 +78,14 @@ if not exists( qcfn ) :
             print("copy "+ newx)
             link_file_with_dirs(Path(x), Path(newx))
             print("done")
+        bvx=re.sub("nii.gz","bval",x)
+        bvx2=re.sub("nii.gz","bvec",x)
+        if exists( bvx ) and exists( bvx2 ):
+            newbvx = "NRG/"+str(Path(*xparts)) + "/"+ mysep.join( xparts )+'.bval'
+            newbvx2 = "NRG/"+str(Path(*xparts)) + "/"+ mysep.join( xparts )+'.bvec'
+            link_file_with_dirs(Path(bvx), Path(newbvx))
+            link_file_with_dirs(Path(bvx2), Path(newbvx2))
+
         if not antspymm.validate_nrg_file_format( newx, mysep )[0]:
             print("bad "+ newx)
             derka
