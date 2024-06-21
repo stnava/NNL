@@ -19,7 +19,23 @@ def map_modality(modality):
         'dtilr': 'DTILR',
         'dtirl': 'DTIRL',
         'perf': 'perf',
-        'rsfmri': 'rsfMRI'
+        'rsfmri': 'rsfMRI',
+        't11': 'T1w',
+        'flair1': 'T2Flair',
+        'dwi_ap1': 'DTILR',
+        'dwi_pa1': 'DTIRL',
+        'dtilr1': 'DTILR',
+        'dtirl1': 'DTIRL',
+        'perf1': 'perf',
+        'rsfmri1': 'rsfMRI',
+        't12': 'T1w',
+        'flair2': 'T2Flair',
+        'dwi_ap2': 'DTILR',
+        'dwi_pa2': 'DTIRL',
+        'dtilr2': 'DTILR',
+        'dtirl2': 'DTIRL',
+        'perf2': 'perf',
+        'rsfmri2': 'rsfMRI'
     }
     return modality_map.get(modality.lower(), None)
 
@@ -54,7 +70,6 @@ if not exists( qcfn ):
     print("Collect all images" )
 # # antspymm.get_valid_modalities( )
     mymods = ['t1','flair','dwi_ap', 'dwi_pa', 'perf', 'rsfmri' ]
-    nwmods = ['T1w','T2Flair', 'DTILR', 'DTIRL', 'perf', 'rsfMRI' ]
     afns0=[]
     for m in mymods:
         afns0.append( glob.glob( mydir + "*/*/*"+m+"*nii.gz" ) )
@@ -77,7 +92,10 @@ if not exists( qcfn ):
         xparts.append( '000' ) # placeholder image id
         xparts =  ['NNL'] + xparts
         mm = 3
-        xparts[mm] = map_modality( xparts[mm] )
+        mymodmap = map_modality( xparts[mm] )
+        if mymodmap is None:
+            continue
+        xparts[mm] = mymodmap
         xparts[1] = re.sub("1001","1001-",xparts[1])
         newx = "NRG/"+str(Path(*xparts)) + "/"+ mysep.join( xparts )+'.nii.gz'
         if antspymm.validate_nrg_file_format( newx, mysep )[0] and not exists( newx ) :
