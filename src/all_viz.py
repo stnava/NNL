@@ -3,8 +3,12 @@ import shutil
 from pathlib import Path
 
 copy_file_with_dirs = lambda src, dst: (dst.parent.mkdir(parents=True, exist_ok=True), shutil.copy(src, dst))[1]
-link_file_with_dirs = lambda src, dst: (dst.parent.mkdir(parents=True, exist_ok=True), os.symlink(src, dst))[1]
-# os.symlink(file, destination_file)lambda src, dst: (dst.parent.mkdir(parents=True, exist_ok=True), shutil.copy(src, dst))[1]
+
+link_file_with_dirs = lambda src, dst: (
+    dst.parent.mkdir(parents=True, exist_ok=True),
+    os.remove(dst) if dst.exists() else None,
+    os.symlink(src, dst)
+)[2]
 
 def map_modality(modality):
     modality_map = {
@@ -46,9 +50,10 @@ mydir = os.path.expanduser( "/mnt/cluster/data/NNL/Nifti/" )
 # get all the subject t1 images
 qcfn="images_to_qc_2024_June.csv"
 mysep='_'
-if not exists( qcfn ) or True:
+if not exists( qcfn ):
     print("Collect all images" )
-    mymods = ['t1','flair','dwi_ap', 'dwi_pa', 'perf', 'rsfmri' ]#   # antspymm.get_valid_modalities( )
+# # antspymm.get_valid_modalities( )
+    mymods = ['t1','flair','dwi_ap', 'dwi_pa', 'perf', 'rsfmri' ]
     nwmods = ['T1w','T2Flair', 'DTILR', 'DTIRL', 'perf', 'rsfMRI' ]
     afns0=[]
     for m in mymods:
@@ -73,11 +78,16 @@ if not exists( qcfn ) or True:
         xparts =  ['NNL'] + xparts
         mm = 3
         xparts[mm] = map_modality( xparts[mm] )
+        xparts[1] = re.sub("1001","1001-",xparts[1])
         newx = "NRG/"+str(Path(*xparts)) + "/"+ mysep.join( xparts )+'.nii.gz'
         if antspymm.validate_nrg_file_format( newx, mysep )[0] and not exists( newx ) :
             print("copy "+ newx)
             link_file_with_dirs(Path(x), Path(newx))
             print("done")
+        jsonfn=re.sub("nii.gz","json",x)
+        if exists( jsonfn ) :
+            newjsonfn = "NRG/"+str(Path(*xparts)) + "/"+ mysep.join( xparts )+'.json'
+            link_file_with_dirs(Path(jsonfn), Path(newjsonfn) )
         bvx=re.sub("nii.gz","bval",x)
         bvx2=re.sub("nii.gz","bvec",x)
         if exists( bvx ) and exists( bvx2 ):
@@ -93,6 +103,8 @@ if not exists( qcfn ) or True:
     df = pd.DataFrame(nrgfns, columns=['filename'])
     df.to_csv( qcfn )
     print( df. shape )
+    derka
+
 ##########################
 df = pd.read_csv( qcfn ) #
 from pathlib import Path #
@@ -104,8 +116,8 @@ off=round( n / 200 )
 indexLo=index*off
 indexHi=(index+1)*off
 print("Zindex " + str(index) + " low " + str(indexLo) + " high " + str( indexHi ) )
-# for index2 in range( indexLo, indexHi ):
-for index2 in range( 0, n+1 ):
+for index2 in range( indexLo, indexHi ):
+# for index2 in range( 0, n+1 ):
     if index2 < df.shape[0]:
         ifn=df['filename'].iloc[index2]
         mystem=Path( ifn ).stem    
@@ -122,4 +134,5 @@ for index2 in range( 0, n+1 ):
             #    pass
 
 print( str(index) + " finnish")
+
 
