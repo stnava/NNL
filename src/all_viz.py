@@ -1,6 +1,7 @@
 ##################################################################
 import shutil
 from pathlib import Path
+import sys
 
 copy_file_with_dirs = lambda src, dst: (dst.parent.mkdir(parents=True, exist_ok=True), shutil.copy(src, dst))[1]
 
@@ -121,7 +122,7 @@ if not exists( qcfn ):
     df = pd.DataFrame(nrgfns, columns=['filename'])
     df.to_csv( qcfn )
     print( df. shape )
-    derka
+    sys.exit(0)
 
 ##########################
 df = pd.read_csv( qcfn ) #

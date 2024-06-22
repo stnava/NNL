@@ -2,6 +2,7 @@ echo "Step 0: reorganize to NRG and run blind QC"
 rm images_to_qc_2024_June.csv 
 python3 src/all_viz.py
 bash src/00_viz_h.sh
+isqempty
 echo "Step 1: calculate outlierness scores and match good data together to the T1"
 rm *outlier*csv matched_mm_data5.csv
 python3 src/outlierness.py
